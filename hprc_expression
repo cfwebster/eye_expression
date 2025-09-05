@@ -1,0 +1,29 @@
+#!/bin/bash
+##ENVIRONMENT SETTINGS; CHANGE WITH CAUTION
+#SBATCH --export=NONE        #Do not propagate environment
+#SBATCH --get-user-env=L     #Replicate login environment
+
+##NECESSARY JOB SPECIFICATIONS
+#SBATCH --job-name=winter1     #Set the job name
+#SBATCH --time=23:30:00            
+#SBATCH --ntasks=1                 #Request 1 task
+#SBATCH --ntasks-per-node=12        #Request 1 task/core per node
+#SBATCH --mem=100G                #Request 2560MB (2.5GB) per node
+#SBATCH --output=winter1.%j    #Send stdout/err to Example1Out.[jobID]
+
+#trimming and editing raw read
+module purge
+module load GCCcore/11.2.0 Trim_Galore/0.6.7
+trim_galore --paired /raw/11723011_R1.fastq.gz /raw/11723011_R2.fastq.gz --cores 4 -o /output/11723011/
+
+module purge
+module load GCC/12.2.0 STAR/2.7.10b
+#indexes created separately, now aligning reads
+STAR --genomeDir /ref_genome/ --runThreadN 12 --readFilesIn /output/11723011/11723011_R1_val_1.fq.gz /output/11723011/11723011_R2_val_2.fq.gz --outFileNamePrefix /output/11723011/11723011 --outSAMtype BAM SortedByCoordinate --twopassMode Basic --readFilesCommand zcat
+
+module purge
+module load GCC/12.2.0 SAMtools/1.17
+samtools index /output/11723011/11723011Aligned.sortedByCoord.out.bam
+module purge 
+module load GCC/11.2.0 OpenMPI/4.1.1 HTSeq/2.0.1  
+htseq-count /output/11723011/11723011Aligned.sortedByCoord.out.bam /ref_genome/02.11.2023.17_33_46.HLtadBra3_v1.gtf --format=bam --stranded=no --order=pos --idattr=gene_id > /output/11723011/11723011_counts.txt
