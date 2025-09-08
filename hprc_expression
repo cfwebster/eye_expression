@@ -3,13 +3,8 @@
 #SBATCH --export=NONE        #Do not propagate environment
 #SBATCH --get-user-env=L     #Replicate login environment
 
-##NECESSARY JOB SPECIFICATIONS
-#SBATCH --job-name=winter1     #Set the job name
-#SBATCH --time=23:30:00            
-#SBATCH --ntasks=1                 #Request 1 task
-#SBATCH --ntasks-per-node=12        #Request 1 task/core per node
-#SBATCH --mem=100G                #Request 2560MB (2.5GB) per node
-#SBATCH --output=winter1.%j    #Send stdout/err to Example1Out.[jobID]
+#also removed necessary job settings
+#directory names have been simplified for clarity sake
 
 #trimming and editing raw read
 module purge
