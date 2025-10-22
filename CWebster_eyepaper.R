@@ -18,10 +18,13 @@ season <- dplyr::pull(metaData1, season)
 file_name <- dplyr::pull(metaData1, file_name)
 batch <- dplyr::pull(metaData1, batch)
 
-sampleTable<-data.frame(sampleName=sampleFiles, fileName=sampleFiles, season=season, ID=ID, batch=batch)
+sampleTable <- data.frame(sampleName=sampleFiles, fileName=sampleFiles, season=season, ID=ID, batch=batch)
 sampleTable$season <-factor(sampleTable$season)
 sampleTable$batch <- factor(sampleTable$batch)
-ddsHTSeq<-DESeqDataSetFromHTSeqCount(sampleTable=sampleTable, directory = directory, design= ~ batch + season)
+#for daily dataset, sex was also made into factor
+ddsHTSeq <- DESeqDataSetFromHTSeqCount(sampleTable=sampleTable, directory = directory, design= ~ batch + season)
+#for daily time point data, the following ddsHTSeq object was created
+#ddsHTSeq <- DESeqDataSetFromHTSeqCount(sampleTable=sampleTable, directory = directory, design= ~ sex + time)
 countdata <- assay(ddsHTSeq)
 countdata <- countdata[rowSums(countdata) > 0, ]
 mod <- model.matrix(~ batch + season, data = colData(ddsHTSeq))
@@ -33,7 +36,10 @@ for (i in 1:ncol(svobj$sv)) {
 }
 
 design(ddsHTSeq) <- ~ batch + SV1 + SV2 + season
+#design(ddsHTSeq) <- ~ SV1 + SV2 + sex + time
 dds <- DESeq(ddsHTSeq, test = "LRT", full = ~ batch + SV1 + SV2 + season, reduced = ~ batch + SV1 + SV2)
+#final dds model used for daily time point
+#dds <- DESeq(ddsHTSeq, test = "LRT", full = ~ SV1 + SV2 + sex + season, reduced = ~ SV1 + SV2 + sex)
 dds <- estimateSizeFactors(dds)
 idx <- rowSums(counts(dds, normalized=TRUE) >= 5 ) >= 3
 eye_dds <- dds[idx,]
@@ -171,4 +177,5 @@ results_score <- get_gene_scores(input_genes, acore_list)
 #custom_id <- upload_GMT_file("custom_filtered.gmt")
 #gp__M4Ac_Y300_5Eg <- new custom ID based on tadbra genome
 res <- gost(query = sig_season, significant = FALSE, organism = 'gp__M4Ac_Y300_5Eg')
+
 eye_res <- as.data.frame(res$result)
