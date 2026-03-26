@@ -1,10 +1,11 @@
-This repository contains supplemental material and all code necessary to reproduce the analyses reported in C.F. Webster, "Seasonal ocular transcriptome of an echolocating bat reveals a robust adaptive response to summer twilight."
+This repository contains supplemental material and all code necessary to reproduce the analyses reported in C.F. Webster, "Seasonal changes in the transcriptome of bat eyes reveal adaptive changes to exploit summer twilight."
 
 1. Supplemental Tables (Supplemental Tables CWebster.xlsx)<br>
    This Excel file includes the supplemental data tables described in the supplemental material section of the manuscript:<br>
-   - Supplemental Table S1: Final list of target genes that were examined with functional categorization. Data includes gene ID, gene name, ensembl transcript ID as reported in species' genome, and functional category the gene was assigned to.<br>
-   - Supplemental Table S2: Significant seasonal genes (DESeq2 padj < 0.05) with WGCNA and mFuzz test results.<br>
-   - Supplemental Table S3: Significant daily genes (DESeq2 padj < 0.05) with WGCNA and mFuzz test results.<br>
+   - Supplemental Table S1: Metadata for biological replicates for both seasonal and daily datasets
+   - Supplemental Table S2: Final list of target genes that were examined with functional categorization. Data includes gene ID, gene name, ensembl transcript ID as reported in species' genome, and functional category the gene was assigned to.<br>
+   - Supplemental Table S3: Significant seasonal genes (DESeq2 padj < 0.05) with WGCNA and mFuzz test results.<br>
+   - Supplemental Table S4: Significant daily genes (DESeq2 padj < 0.05) with WGCNA and mFuzz test results.<br>
 
 2. HTSeq-Count Results (HTSeq Counts.zip)<br>
 A zip file containing per-sample HTSeq-count text files derived from raw data files. Each file corresponds to a biological replicate for both the daily and seasonal datasets. A total of 45 text files are contained within the zip folder.
